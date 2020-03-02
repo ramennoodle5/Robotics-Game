@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Main implements Runnable, KeyListener {
-
+//sebby wuz here
     final int WIDTH = 500; //800
     final int HEIGHT = 500; //700
     public BufferStrategy bufferStrategy;
