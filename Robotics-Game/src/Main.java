@@ -1,3 +1,5 @@
+import javafx.scene.shape.Circle;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
@@ -9,9 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Main implements Runnable, KeyListener {
-//sebby wuz here
-    final int WIDTH = 500; //800
-    final int HEIGHT = 500; //700
+
+    final int WIDTH = 700; //800
+    final int HEIGHT = 700; //700
     public BufferStrategy bufferStrategy;
     public JFrame frame;
     public JPanel panel;
@@ -19,6 +21,8 @@ public class Main implements Runnable, KeyListener {
 
     public Robot robot;
     public Blocks[] block;
+    public BlockHolders[] tower;
+    public BlockHolders[] goal;
 
     public static void main(String[] args) {
 
@@ -30,14 +34,27 @@ public class Main implements Runnable, KeyListener {
     public Main() {
 
         setUpGraphics();
-        robot = new Robot(120, 120);
+        robot = new Robot(100, 120);
         block = new Blocks[10];
+        tower = new BlockHolders[5];
+        goal = new BlockHolders[4];
         for (int x=0;x<block.length;x++){
-            int random = ((int) (Math.random() * 250))+125;
-            int random2 = ((int) (Math.random() * 250))+125;
-            block[x] = new Blocks(random,random2,"");
+            int random = ((int) (Math.random() * 500))+100;
+            int random2 = ((int) (Math.random() * 500))+125;
+            block[x] = new Blocks(random,random2);
             block[x].isPickedUp=false;
         }
+
+        goal[0] = new BlockHolders(100,125);
+        goal[1] = new BlockHolders(550,125);
+        goal[2] = new BlockHolders(100,575);
+        goal[3] = new BlockHolders(550,575);
+
+        tower[0] = new BlockHolders(350,200);
+        tower[1] = new BlockHolders(350,200);
+        tower[2] = new BlockHolders(350,200);
+        tower[3] = new BlockHolders(350,200);
+        tower[4] = new BlockHolders(350,200);
 
     }
 
@@ -57,7 +74,7 @@ public class Main implements Runnable, KeyListener {
         } //else {
             //robot.drift();
         //}
-        if (robot.xpos>375) {
+        if (robot.xpos>580) {
             if(robot.ythrust>0){
                 robot.reorient(-5);
             }
@@ -66,7 +83,7 @@ public class Main implements Runnable, KeyListener {
             }
             robot.xpos -= 3;
         }
-        if (robot.xpos<125) {
+        if (robot.xpos<100) {
             if(robot.ythrust>0){
                 robot.reorient(5);
             }
@@ -75,7 +92,7 @@ public class Main implements Runnable, KeyListener {
             }
             robot.xpos += 3;
         }
-        if (robot.ypos>375) {
+        if (robot.ypos>605) {
             if(robot.xthrust>0){
                 robot.reorient(5);
             }
@@ -107,8 +124,24 @@ public class Main implements Runnable, KeyListener {
         g.fillRect(0, 0, frame.getWidth(), frame.getHeight());
 
         Graphics2D g2 = (Graphics2D) bufferStrategy.getDrawGraphics();
+        Graphics2D g3 = (Graphics2D) bufferStrategy.getDrawGraphics();
+
+        Rectangle[] twer = new Rectangle[tower.length];
+        Rectangle[] gl = new Rectangle[goal.length];
 
         Rectangle bot = new Rectangle(robot.xpos, robot.ypos,20,20);
+        for (int x=0; x<tower.length;x++){
+            g3.setColor(Color.white);
+            twer[x] = new Rectangle(tower[x].xpos, tower[x].ypos, 20, 20);
+            g3.draw(twer[x]);
+            g3.fill(twer[x]);
+        }
+
+        for (int x=0; x<goal.length;x++){
+            g3.setColor(Color.white);
+            gl[x] = new Rectangle(goal[x].xpos, goal[x].ypos, 50, 50);
+            g3.draw(gl[x]);
+        }
 
         if (robot.isAlive) {
 
@@ -119,7 +152,7 @@ public class Main implements Runnable, KeyListener {
 
 
             g.setColor(Color.white);
-            g.drawRect(125,125,250,250);
+            g.drawRect(100,125,500,500);
 
             g.setColor(Color.white);
             g.drawString(robot.angle + "°", 20, 20);
@@ -127,12 +160,12 @@ public class Main implements Runnable, KeyListener {
         }
 
         for (int x=0; x<block.length;x++){
-            if (block[x].isPickedUp=false){
-            g.drawRect(block[x].xpos, block[x].ypos,10,10);}
+            g.drawRect(block[x].xpos, block[x].ypos,10,10);
         }
 
         g.dispose();
         g2.dispose();
+        g3.dispose();
 
         bufferStrategy.show();
 
