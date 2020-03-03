@@ -1,17 +1,17 @@
 import java.awt.*;
+public class BlockHolders {
 
-public class Blocks {
-
-    public int xpos, ypos, dx, dy, width, height;
-    Boolean isDoubled, isPickedUp;
+    public int xpos, ypos, width, height;
+    String color;
     public Rectangle rec;
 
-    public Blocks(int pXpos, int pYpos) {
+    public BlockHolders(int pXpos, int pYpos) {
         xpos = pXpos;
         ypos = pYpos;
         height = 10;
         width = 10;
-        isPickedUp=false;
         rec = new Rectangle(xpos, ypos, width, height);
     }
 }
+
+
