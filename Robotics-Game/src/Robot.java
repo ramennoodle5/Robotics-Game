@@ -4,7 +4,7 @@ public class Robot {
 
     public int xpos, ypos, width, height;
     public double velocity = 0, terminalvel = 3, acceleration = .2, drag = .1, ythrust, xthrust, angle;
-    public boolean isThrusting, isRight, isLeft;
+    public boolean isfThrusting, isbThrusting, isRight, isLeft;
     public boolean isAlive;
     public Rectangle rec;
 
@@ -13,7 +13,8 @@ public class Robot {
         ypos = pYpos;
         width = 20;
         height = 20;
-        isThrusting = false;
+        isfThrusting = false;
+        isbThrusting = false;
         isAlive = true;
         angle = 90;
         rec = new Rectangle(xpos, ypos, width, height);
@@ -30,7 +31,7 @@ public class Robot {
         }
     }
 
-    public void thrust() {
+    public void forwardthrust() {
 
         if (velocity < terminalvel) {
             velocity += (acceleration - drag);
@@ -39,6 +40,18 @@ public class Robot {
         xthrust = Math.cos(Math.toRadians(angle)) * velocity;
         ypos += ythrust;
         xpos += xthrust;
+        rec = new Rectangle(xpos, ypos, width, height);
+    }
+
+    public void backwardthrust() {
+
+        if (velocity < terminalvel) {
+            velocity -= (acceleration - drag);
+        }
+        ythrust = Math.sin(Math.toRadians(angle)) * velocity;
+        xthrust = Math.cos(Math.toRadians(angle)) * velocity;
+        ypos -= ythrust;
+        xpos -= xthrust;
         rec = new Rectangle(xpos, ypos, width, height);
     }
 

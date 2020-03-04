@@ -51,10 +51,10 @@ public class Main implements Runnable, KeyListener {
         goal[3] = new BlockHolders(550,575);
 
         tower[0] = new BlockHolders(350,200);
-        tower[1] = new BlockHolders(350,200);
-        tower[2] = new BlockHolders(350,200);
-        tower[3] = new BlockHolders(350,200);
-        tower[4] = new BlockHolders(350,200);
+        tower[1] = new BlockHolders(150,350);
+        tower[2] = new BlockHolders(550,350);
+        tower[3] = new BlockHolders(350,350);
+        tower[4] = new BlockHolders(350,525);
 
     }
 
@@ -69,11 +69,14 @@ public class Main implements Runnable, KeyListener {
     }
 
     public void moveThings() {
-        if (robot.isThrusting) {
-            robot.thrust();
-        } //else {
-            //robot.drift();
-        //}
+        if (robot.isfThrusting) {
+            robot.forwardthrust();
+        }
+
+        if (robot.isbThrusting) {
+            robot.backwardthrust();
+        }
+
         if (robot.xpos>580) {
             if(robot.ythrust>0){
                 robot.reorient(-5);
@@ -245,7 +248,10 @@ public class Main implements Runnable, KeyListener {
             robot.isLeft = true;
         }
         if (key == 38) {
-            robot.isThrusting = true;
+            robot.isfThrusting = true;
+        }
+        if (key == 40) {
+            robot.isbThrusting = true;
         }
     }
 
@@ -259,7 +265,11 @@ public class Main implements Runnable, KeyListener {
             robot.isLeft = false;
         }
         if (key == 38) {
-            robot.isThrusting = false;
+            robot.isfThrusting = false;
+        }
+
+        if (key == 40) {
+            robot.isbThrusting = false;
         }
     }
 }
