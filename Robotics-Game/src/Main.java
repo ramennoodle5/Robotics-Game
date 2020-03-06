@@ -35,6 +35,7 @@ public class Main implements Runnable, KeyListener {
 
         setUpGraphics();
         robot = new Robot(100, 120);
+        robot.capacity=0;
         block = new Blocks[10];
         tower = new BlockHolders[5];
         goal = new BlockHolders[4];
@@ -61,14 +62,15 @@ public class Main implements Runnable, KeyListener {
     public void run() {
 
         while (true) {
-            moveThings();
             renderGraphics();
-//            checkIntersections();
+            checkIntersections();
+            moveThings();
             pause(20);
         }
     }
 
     public void moveThings() {
+
         if (robot.isfThrusting) {
             robot.forwardthrust();
         }
@@ -176,10 +178,20 @@ public class Main implements Runnable, KeyListener {
 
     public void checkIntersections(){
 
-        for (int x=0; x<block.length;x++){
-            if (robot.rec.intersects(block[x].rec)){
+        for (int x=0; x<block.length; x++){
+
+            if(block[x].rec.intersects(robot.rec) & robot.capacity<=4){
+                System.out.println(robot.capacity);
                 block[x].isPickedUp=true;
             }
+
+            if (block[x].isPickedUp){
+                robot.capacity=robot.capacity+1;
+                block[x].xpos = robot.xpos+(robot.width/4);
+                block[x].ypos = robot.ypos+(robot.height/4);
+
+            }
+
         }
 
     }

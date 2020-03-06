@@ -14,4 +14,5 @@ public class Blocks {
         isPickedUp=false;
         rec = new Rectangle(xpos, ypos, width, height);
     }
+
 }
