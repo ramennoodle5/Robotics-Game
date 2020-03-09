@@ -3,6 +3,7 @@ import java.awt.*;
 public class Blocks {
 
     public int xpos, ypos, dx, dy, width, height;
+    public boolean needsToPick= false;
     Boolean isDoubled, isPickedUp;
     public Rectangle rec;
 

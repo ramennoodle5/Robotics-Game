@@ -23,6 +23,7 @@ public class Main implements Runnable, KeyListener {
     public Blocks[] block;
     public BlockHolders[] tower;
     public BlockHolders[] goal;
+    public int[] blocksHeld = new int[10];
 
     public static void main(String[] args) {
 
@@ -35,27 +36,29 @@ public class Main implements Runnable, KeyListener {
 
         setUpGraphics();
         robot = new Robot(100, 120);
-        robot.capacity=0;
         block = new Blocks[10];
         tower = new BlockHolders[5];
         goal = new BlockHolders[4];
-        for (int x=0;x<block.length;x++){
-            int random = ((int) (Math.random() * 500))+100;
-            int random2 = ((int) (Math.random() * 500))+125;
-            block[x] = new Blocks(random,random2);
-            block[x].isPickedUp=false;
+        for (int x = 0; x < block.length; x++) {
+            int random = ((int) (Math.random() * 500)) + 100;
+            int random2 = ((int) (Math.random() * 500)) + 125;
+
+            block[x] = new Blocks(random, random2);
+            block[x].isPickedUp = false;
+            robot.capacity++;
+
         }
 
-        goal[0] = new BlockHolders(100,125);
-        goal[1] = new BlockHolders(550,125);
-        goal[2] = new BlockHolders(100,575);
-        goal[3] = new BlockHolders(550,575);
+        goal[0] = new BlockHolders(100, 125);
+        goal[1] = new BlockHolders(550, 125);
+        goal[2] = new BlockHolders(100, 575);
+        goal[3] = new BlockHolders(550, 575);
 
-        tower[0] = new BlockHolders(350,200);
-        tower[1] = new BlockHolders(150,350);
-        tower[2] = new BlockHolders(550,350);
-        tower[3] = new BlockHolders(350,350);
-        tower[4] = new BlockHolders(350,525);
+        tower[0] = new BlockHolders(350, 200);
+        tower[1] = new BlockHolders(150, 350);
+        tower[2] = new BlockHolders(550, 350);
+        tower[3] = new BlockHolders(350, 350);
+        tower[4] = new BlockHolders(350, 525);
 
     }
 
@@ -79,38 +82,34 @@ public class Main implements Runnable, KeyListener {
             robot.backwardthrust();
         }
 
-        if (robot.xpos>580) {
-            if(robot.ythrust>0){
+        if (robot.xpos > 580) {
+            if (robot.ythrust > 0) {
                 robot.reorient(-5);
-            }
-            else if(robot.ythrust<0){
+            } else if (robot.ythrust < 0) {
                 robot.reorient(5);
             }
             robot.xpos -= 3;
         }
-        if (robot.xpos<100) {
-            if(robot.ythrust>0){
+        if (robot.xpos < 100) {
+            if (robot.ythrust > 0) {
                 robot.reorient(5);
-            }
-            else if(robot.ythrust<0){
+            } else if (robot.ythrust < 0) {
                 robot.reorient(-5);
             }
             robot.xpos += 3;
         }
-        if (robot.ypos>605) {
-            if(robot.xthrust>0){
+        if (robot.ypos > 605) {
+            if (robot.xthrust > 0) {
                 robot.reorient(5);
-            }
-            else if(robot.xthrust<0){
+            } else if (robot.xthrust < 0) {
                 robot.reorient(-5);
             }
             robot.ypos -= 3;
         }
-        if(robot.ypos<125) {
-            if(robot.xthrust>0){
+        if (robot.ypos < 125) {
+            if (robot.xthrust > 0) {
                 robot.reorient(-5);
-            }
-            else if(robot.xthrust<0){
+            } else if (robot.xthrust < 0) {
                 robot.reorient(5);
             }
             robot.ypos += 3;
@@ -134,15 +133,15 @@ public class Main implements Runnable, KeyListener {
         Rectangle[] twer = new Rectangle[tower.length];
         Rectangle[] gl = new Rectangle[goal.length];
 
-        Rectangle bot = new Rectangle(robot.xpos, robot.ypos,20,20);
-        for (int x=0; x<tower.length;x++){
+        Rectangle bot = new Rectangle(robot.xpos, robot.ypos, 20, 20);
+        for (int x = 0; x < tower.length; x++) {
             g3.setColor(Color.white);
             twer[x] = new Rectangle(tower[x].xpos, tower[x].ypos, 20, 20);
             g3.draw(twer[x]);
             g3.fill(twer[x]);
         }
 
-        for (int x=0; x<goal.length;x++){
+        for (int x = 0; x < goal.length; x++) {
             g3.setColor(Color.white);
             gl[x] = new Rectangle(goal[x].xpos, goal[x].ypos, 50, 50);
             g3.draw(gl[x]);
@@ -150,22 +149,24 @@ public class Main implements Runnable, KeyListener {
 
         if (robot.isAlive) {
 
-            g2.rotate(Math.toRadians(robot.angle), robot.xpos+robot.width/2,robot.ypos+robot.height/2);
+            g2.rotate(Math.toRadians(robot.angle), robot.xpos + robot.width / 2, robot.ypos + robot.height / 2);
             g2.setColor(Color.gray);
             g2.draw(bot);
             g2.fill(bot);
 
 
             g.setColor(Color.white);
-            g.drawRect(100,125,500,500);
+            g.drawRect(100, 125, 500, 500);
 
             g.setColor(Color.white);
             g.drawString(robot.angle + "°", 20, 20);
 
         }
 
-        for (int x=0; x<block.length;x++){
-            g.drawRect(block[x].xpos, block[x].ypos,10,10);
+        for (int x = 0; x < block.length; x++) {
+            if (!block[x].isPickedUp) {
+                g.drawRect(block[x].xpos, block[x].ypos, 10, 10);
+            }
         }
 
         g.dispose();
@@ -176,24 +177,20 @@ public class Main implements Runnable, KeyListener {
 
     }
 
-    public void checkIntersections(){
+    //character skins:
+    //       easter egg jew skin & black skin;
 
-        for (int x=0; x<block.length; x++){
+    public void checkIntersections() {
 
-            if(block[x].rec.intersects(robot.rec) & robot.capacity<=4){
-                System.out.println(robot.capacity);
-                block[x].isPickedUp=true;
+        for (int x = 0; x < block.length; x++) {
+
+            if (block[x].rec.intersects(robot.rec) & robot.capacity <= 4) {
+                block[x].isPickedUp = true;
+                robot.capacity++;
             }
-
-            if (block[x].isPickedUp){
-                robot.capacity=robot.capacity+1;
-                block[x].xpos = robot.xpos+(robot.width/4);
-                block[x].ypos = robot.ypos+(robot.height/4);
-
-            }
-
         }
 
+        System.out.println(robot.capacity);
     }
 
     public void setUpGraphics() {

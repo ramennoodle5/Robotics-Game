@@ -17,7 +17,7 @@ public class Robot {
         isbThrusting = false;
         isAlive = true;
         angle = 90;
-        capacity = 0;
+        capacity=0;
         rec = new Rectangle(xpos, ypos, width, height);
     }
 
