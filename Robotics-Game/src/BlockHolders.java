@@ -1,7 +1,7 @@
 import java.awt.*;
 public class BlockHolders {
 
-    public int xpos, ypos, width, height;
+    public int xpos, ypos, width, height, Capacity;
     String color;
     public Rectangle rec;
 

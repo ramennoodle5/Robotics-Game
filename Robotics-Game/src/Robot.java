@@ -3,7 +3,7 @@ import java.awt.*;
 public class Robot {
 
     public int xpos, ypos, width, height, capacity;
-    public double velocity = 0, terminalvel = 3, acceleration = .2, drag = .1, ythrust, xthrust, angle;
+    public double velocity = 0, terminalvel = 5, acceleration = .2, drag = .1, ythrust, xthrust, angle;
     public boolean isfThrusting, isbThrusting, isRight, isLeft;
     public boolean isAlive;
     public Rectangle rec;
@@ -55,5 +55,4 @@ public class Robot {
         xpos -= xthrust;
         rec = new Rectangle(xpos, ypos, width, height);
     }
-
 }

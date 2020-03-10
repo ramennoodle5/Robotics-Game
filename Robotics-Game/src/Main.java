@@ -23,7 +23,12 @@ public class Main implements Runnable, KeyListener {
     public Blocks[] block;
     public BlockHolders[] tower;
     public BlockHolders[] goal;
-    public int[] blocksHeld = new int[10];
+
+    double depositTime;
+    double pickupTime;
+    double Timer;
+
+
 
     public static void main(String[] args) {
 
@@ -45,7 +50,6 @@ public class Main implements Runnable, KeyListener {
 
             block[x] = new Blocks(random, random2);
             block[x].isPickedUp = false;
-            robot.capacity++;
 
         }
 
@@ -78,7 +82,7 @@ public class Main implements Runnable, KeyListener {
             robot.forwardthrust();
         }
 
-        if (robot.isbThrusting) {
+        if (robot.isbThrusting){
             robot.backwardthrust();
         }
 
@@ -177,20 +181,41 @@ public class Main implements Runnable, KeyListener {
 
     }
 
-    //character skins:
-    //       easter egg jew skin & black skin;
-
     public void checkIntersections() {
 
         for (int x = 0; x < block.length; x++) {
-
-            if (block[x].rec.intersects(robot.rec) & robot.capacity <= 4) {
+            if (block[x].rec.intersects(robot.rec) & robot.capacity <= 3) {
                 block[x].isPickedUp = true;
+                block[x].rec.x=700;
+                block[x].rec.y=700;
                 robot.capacity++;
             }
         }
 
+        for (int x=0; x<tower.length; x++){
+            if (robot.rec.intersects(tower[x].rec) && tower[x].Capacity<2){
+                dumpInTower(tower[x]);
+            }
+        }
+
+        for (int x=0; x<goal.length; x++){
+            if (robot.rec.intersects(goal[x].rec)){
+                dumpInZone(goal[x]);
+            }
+        }
+
         System.out.println(robot.capacity);
+    }
+
+    public void dumpInTower(BlockHolders Tower){
+        robot.capacity--;
+        Tower.Capacity++;
+    }
+
+    public void dumpInZone(BlockHolders Goal){
+        Goal.Capacity=robot.capacity;
+        robot.capacity=0;
+
     }
 
     public void setUpGraphics() {
